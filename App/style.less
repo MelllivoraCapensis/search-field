@@ -1,17 +1,37 @@
-@field-width: 80%;
+@field-width: 100%;
 @input-height: 30px;
 @dropdown-item-height: 30px;
+@dropdown-item-border-depth: 2px; 
+@selected-item-width: 20px;
+
+html, body {
+	margin: 0;
+	height: 100%;
+}
+
+.wrapper {
+	width: 100%;
+	height: 100%;
+    background: url('/App/img/back-train.jpg');
+	filter: blur(1px);
+	opacity: 0.7;
+}
+
 .search-field-wrapper {
-    margin: 40px auto;
+	position: fixed;
+	left: 440px;
+	top: 130px;
 
 	width: 300px;
-	height: 150px;
-	border: 2px solid black;
+
+	background: white;
+	box-shadow: 0 0 5px 5px white;
+	opacity: 0.7;
+	
 }
 
 .search-field {
     width: 100%;
-    min-height: 100px;
 
 	display: flex;
 	flex-direction: column;
@@ -25,13 +45,19 @@
 }
 
 .search-field__base-border {
-	border: 2px solid lightblue;
+	border: 1px solid lightblue;
 }
 
 .search-field__base-list {
 	list-style: none;
 
 	padding: 0;
+	padding-inline-start: 0;
+}
+
+.search-field__base-text {
+	font-weight: bold;
+    text-shadow: 1px 1px 0px  black;
 }
 
 .search-field__input-wrapper {
@@ -39,9 +65,7 @@
 
 	position: relative;
 
-	margin-top: 20px;
-  
-  	height: 30px;
+	height: 30px;
 }
 
 .search-field__input {
@@ -49,20 +73,30 @@
 	height: 100%;
 
 	box-sizing: border-box;
+	border: none;
 	border: 2px solid lightblue;
 
 	font-size: 16px;
+	text-indent: 5px;
+
+	&:focus {
+		background: white;
+    	border-color: coral;
+    	outline: none;
+	}
+
+	&::placeholder {
+        opacity: 0.4;
+
+	}
 }
 
 .search-field__selected-box {
    .search-field__base-box();
-   .search-field__base-border();
    .search-field__base-list();
     
-    margin: 0;
-    margin-top: 20px; 
+    margin-top: 20px;
 
-    min-height: 50px;
 }
 
 .search-field__dropdown-box {
@@ -72,16 +106,20 @@
 	position: absolute;
 	top: @input-height;
 	left: 0;
+	z-index: 10;
 
 	width: 100%;
-    max-height: @dropdown-item-height * 8;
+    max-height: (@dropdown-item-height + 2 * @dropdown-item-border-depth) * 8;
     overflow-y: hidden;
+    box-sizing: border-box;
+
+    padding: 0;
     
-    background: lightblue;
+    background: white;
 }
 
 .search-field__dropdown-item {
-    .search-field__base-border();
+.search-field__base-text();
 
     display: flex;
     align-items: center;
@@ -90,15 +128,50 @@
 	box-sizing: border-box;
     
     text-indent: 10px;
-    border: 2px solid white;
+    border: @dropdown-item-border-depth solid white;
+   
+    &:hover {
+        opacity: 0.8;
+    }
 
-    &:hover,
     &:focus {
     	background: white;
     	border-color: coral;
     	cursor: pointer;
     	outline: none;
     }
+}
+
+.search-field__selected-item {
+	.search-field__base-text();
+
+    position: relative;
+
+	display: inline-flex;
+	height: @selected-item-width;
+	margin: 5px;
+	padding-right: @selected-item-width;
+
+    padding: 0 5px;
+    padding-right: @selected-item-width;
+}
+
+.search-field__selected-closer {
+	position: absolute;
+    right: 0;
+    top: 0;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: @selected-item-width;
+    width: @selected-item-width;
+    
+    font-weight: bold;
+    color: red;
+
+    cursor: pointer;
 }
 
 .hidden {
