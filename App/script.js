@@ -4,8 +4,8 @@ class SearchField {
 		this.maxSelectNum = maxSelectNum;
         
         this.state = {
-            searchResult: false
-		}
+            searchResult: false,
+      	}
 
 		this.init();
 	}
@@ -18,7 +18,6 @@ class SearchField {
     init () {
     	this.build();
     	this.addTypeHandler();
-    	this.addArrowHandler();
     }
 
     build () {
@@ -29,13 +28,14 @@ class SearchField {
 
     	this.searchInputWrapper = document.createElement('div');
     	this.searchInputWrapper.classList.add('search-field__input-wrapper');
+    	this.searchInputWrapper.classList.add('search-field__base--tabbed');
     	this.box.appendChild(this.searchInputWrapper);
-    	this.searchInputWrapper.tabIndex = 0;
 
     	this.searchInput = document.createElement('input');
     	this.searchInput.classList.add('search-field__input');
     	this.searchInput.placeholder = 'Начните вводить ...'
     	this.searchInputWrapper.appendChild(this.searchInput);
+    	this.searchInputWrapper.tabIndex = 0;
 
     	this.selectedBox = document.createElement('ul');
     	this.selectedBox.classList.add('search-field__selected-box');
@@ -58,16 +58,47 @@ class SearchField {
 	}
 
 	addArrowHandler () {
-		this.box.onkeydown = (e) => {
+		   
+			this.searchInputWrapper.onkeydown = (e) => {
+
 			if(e.key == 'ArrowDown')
 			{
-				e.target.nextElementSibling.focus();
-			}
+				const activeElem = this.searchInputWrapper.
+				    querySelector(':focus');
+				let nextElem = null;
+				if(activeElem.tagName == 'INPUT')
+					 nextElem = this.dropdownBox
+				        .children[0];
+				else
+					 nextElem = activeElem.nextElementSibling;
+				
+				if(!nextElem)
+					return;
 			
-			if(e.key == 'ArrowDown')
-			{
-				e.target.nextElementSibling.focus();
+				nextElem.focus();
+
+				return;
+				
 			}
+
+			if(e.key == 'ArrowUp')
+			{
+				const activeElem = this.searchInputWrapper.
+				    querySelector(':focus');
+
+				if(activeElem.tagName == 'INPUT')
+					return;
+
+				let prevElem = activeElem.previousElementSibling;
+				if(!prevElem)
+					prevElem = this.searchInput;
+				
+				prevElem.focus();
+
+				return;
+			}
+
+			this.searchInput.focus();
 		}
 	}
 
@@ -104,6 +135,8 @@ class SearchField {
             this.appendDropdownItem(item);
         })
 
+        this.addArrowHandler();
+
 	}
 
 	appendDropdownItem (item) {
@@ -112,49 +145,10 @@ class SearchField {
 		this.dropdownBox.appendChild(itemLi);
 		itemLi.innerHTML = item.name;
 		itemLi.tabIndex = 0;
+		itemLi.classList.add('search-field__base--tabbed');
 
 
-		// itemLi.onfocus = () => {
-
-		// 	itemLi.onkeydown = (e) => {
-		// 		if(e.key == 'ArrowDown')
-		// 		{
-		// 			this.timerIdDown = window.setInterval(() => {
-
-		// 				if(e.target.nextElementSibling)
-		// 	    	        e.target.nextElementSibling.focus();
-		// 			}, 500);
-					
-		// 		}
-		// 	    if(e.key == 'ArrowUp')
-		// 	    {
-		// 	    	this.timerIdUp = window.setInterval(() => {
-		// 				if(e.target.nextElementSibling)
-		// 	    	        e.target.nextElementSibling.focus();
-		// 			}, 500);
-
-		// 		}
-		// 	}
-
-		// 	itemLi.onkeyup = (e) => {
-		// 		if(e.key == 'ArrowDown')
-		// 		    {
-		// 			if(this.timerIdDown)
-		// 				window.clearInterval(this.timerIdDown);
-		// 			if(e.target.nextElementSibling)
-		// 	    	        e.target.nextElementSibling.focus();
-		// 		    }
-				
-		// 		if(e.key == 'ArrowUp')
-		// 		    {
-		// 			if(this.timerIdUp)
-		// 				window.clearInterval(this.timerIdUp);
-		// 			if(e.target.nextElementSibling)
-		// 	    	        e.target.nextElementSibling.focus();
-		// 		    }
-		// 		}
-								
-		// }
+		
 	}
 
 
